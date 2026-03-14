@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PacketController;
 use App\Http\Controllers\PacketProductController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware('role:admin')->group(function () {
         Route::get('/order-report-day', [OrderController::class, 'orderReportDay']);
         Route::get('/pending-report-total', [OrderController::class, 'pendingReportTotal']);
         Route::get('/confirmed-report-total', [OrderController::class, 'confirmedReportTotal']);
+        Route::get('/confirm/{order:order_id}', [OrderController::class, 'confirm']);
     });
 
     /* Category */
@@ -69,6 +71,11 @@ Route::middleware('role:admin')->group(function () {
         Route::delete('/{product}', [ProductController::class, 'delete']);
     });
 
+    /* Setting */
+    Route::prefix('setting')->group(function () {
+        Route::post('/', [SettingController::class, 'update']);
+    });
+
     /* Customer */
     Route::get('/customer/report-total', [UserController::class, 'reportTotal']);
 });
@@ -87,3 +94,8 @@ Route::post('/checkout', [OrderController::class, 'checkout']);
 
 /* Order History */
 Route::get('/order/history', [OrderController::class, 'history']);
+Route::post('/order/{order:order_id}', [OrderController::class, 'detail']);
+
+/* Setting */
+Route::get('/setting', [SettingController::class, 'index']);
+Route::get('download-qris', [SettingController::class, 'downloadQris']);

@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_account_number');
-            $table->string('payment_account_name');
+            $table->string('bank', 50)->nullable();
+            $table->string('account_number', 50)->nullable();
+            $table->string('account_name', 100)->nullable();
+            $table->string('qris')->nullable();
             $table->timestamps();
         });
     }

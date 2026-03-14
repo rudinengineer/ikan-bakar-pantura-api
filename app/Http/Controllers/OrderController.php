@@ -137,6 +137,48 @@ class OrderController extends Controller
         }
     }
 
+    public function confirm(Order $order)
+    {
+        if (!Auth::check()) {
+            return Response::error('Unauthorized', 401);
+        }
+
+        try {
+            $order->update([
+                'status' => 'confirmed'
+            ]);
+
+            return Response::success();
+        } catch (\Throwable $e) {
+            Log::error('failed to confirm order', $e);
+            return Response::error();
+        }
+    }
+
+    public function detail(Request $request, Order $order)
+    {
+        /* Check Permission */
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            if (Auth::check() && $order->user_id !== Auth::id()) {
+                return Response::error('Unauthorized', 401);
+            } else {
+                // if (!$request->device_id) {
+                //     return Response::error('Unauthorized', 401);
+                // }
+
+                // if ($order->device_id !== $request->device_id) {
+                //     return Response::error('Unauthorized', 401);
+                // }
+            }
+        }
+
+        $order->load('order_items');
+
+        return Response::successWithData(
+            $order
+        );
+    }
+
     public function history()
     {
         $orders = Order::with('order_items')
