@@ -14,6 +14,7 @@ class SettingRepository
 
             if (!$setting) {
                 $setting = Setting::create([
+                    'store_id' => config('app.store_id'),
                     'bank' => ''
                 ]);
             }

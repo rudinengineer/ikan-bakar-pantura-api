@@ -99,3 +99,9 @@ Route::post('/order/{order:order_id}', [OrderController::class, 'detail']);
 /* Setting */
 Route::get('/setting', [SettingController::class, 'index']);
 Route::get('download-qris', [SettingController::class, 'downloadQris']);
+
+/* Profile */
+Route::prefix('/profile')->group(function () {
+    Route::get('/', [UserController::class, 'profile']);
+    Route::post('/', [UserController::class, 'update']);
+})->middleware('jwt.auth');

@@ -15,6 +15,7 @@ class SettingResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'whatsapp' => $this->whatsapp,
             'bank' => $this->bank,
             'account_name' => $this->account_name,
             'account_number' => $this->account_number,

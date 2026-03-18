@@ -72,8 +72,8 @@ class OrderController extends Controller
                 'note' => $request->note,
                 'payment_method' => $request->payment_method,
                 'payment_image' => $fileName,
-                'total' => 0,
                 'payment_total' => 0,
+                'total' => 0,
                 'device_id' => $request->device_id
             ];
 
@@ -122,7 +122,7 @@ class OrderController extends Controller
             /* Update Order */
             $order->update([
                 'total' => $total,
-                'payment_total' => $request->payment_method === 'dp' ? $total / 2 : $total
+                'payment_total' => $request->payment_method === 'custom' ? $request->nominal_dp : ($request->payment_method === 'dp' ? $total / 2 : $total)
             ]);
 
             DB::commit();
@@ -158,19 +158,19 @@ class OrderController extends Controller
     public function detail(Request $request, Order $order)
     {
         /* Check Permission */
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
-            if (Auth::check() && $order->user_id !== Auth::id()) {
-                return Response::error('Unauthorized', 401);
-            } else {
-                // if (!$request->device_id) {
-                //     return Response::error('Unauthorized', 401);
-                // }
+        // if (!Auth::check() || Auth::user()->role !== 'admin') {
+        //     if (Auth::check() && $order->user_id !== Auth::id()) {
+        //         return Response::error('Unauthorized', 401);
+        //     } else {
+        //         // if (!$request->device_id) {
+        //         //     return Response::error('Unauthorized', 401);
+        //         // }
 
-                // if ($order->device_id !== $request->device_id) {
-                //     return Response::error('Unauthorized', 401);
-                // }
-            }
-        }
+        //         // if ($order->device_id !== $request->device_id) {
+        //         //     return Response::error('Unauthorized', 401);
+        //         // }
+        //     }
+        // }
 
         $order->load('order_items');
 
