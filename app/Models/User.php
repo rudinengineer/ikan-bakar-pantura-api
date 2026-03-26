@@ -6,9 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -40,16 +39,20 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'locked_at' => 'datetime',
+            'login_attempt' => 'integer',
+            'is_active' => 'boolean',
+            'role_id' => 'integer'
         ];
     }
 
-    public function getJWTIdentifier()
+    public function role()
     {
-        return $this->getKey();
+        return $this->belongsTo(Role::class);
     }
 
-    public function getJWTCustomClaims()
+    public function store()
     {
-        return [];
+        return $this->belongsTo(Store::class);
     }
 }

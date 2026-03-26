@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\Log;
 use App\Http\Helpers\Response;
 use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +34,7 @@ class AuthController extends Controller
 
         try {
             /* Create User */
-            $user = User::create([
+            $user = Customer::create([
                 'store_id' => config('app.store_id'),
                 'name' => $request->name,
                 'username' => Str::slug($request->name, '_') . random_int(1000, 9999),
@@ -44,7 +44,7 @@ class AuthController extends Controller
             ]);
 
             /* Generate Access Token */
-            $token = Auth::attempt(
+            $token = Auth::guard('api')->attempt(
                 $request->only('phone', 'password')
             );
 
@@ -77,11 +77,11 @@ class AuthController extends Controller
 
         $credentials = $request->only('phone', 'password');
 
-        if (!$token = Auth::attempt($credentials)) {
+        if (!$token = Auth::guard('api')->attempt($credentials)) {
             return Response::error('Unauthorized', 401);
         }
 
-        $user = User::where('phone', $request->phone)
+        $user = Customer::where('phone', $request->phone)
             ->first();
 
         return Response::successWithData([
@@ -92,7 +92,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::logout();
+        Auth::guard('api')->logout();
         return response()->json(['message' => 'logout success']);
     }
 }

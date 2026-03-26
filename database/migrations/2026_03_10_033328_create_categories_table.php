@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Store::class);
             $table->string('name', 50);
-            $table->string('slug', 60)->unique();
+            $table->string('slug', 60);
             $table->integer('order_number')->default(1);
             $table->boolean('is_active')->default(true);
 

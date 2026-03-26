@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\Log;
 use App\Http\Helpers\Response;
-use App\Http\Repository\CategoryRepository;
 use App\Http\Repository\PacketRepository;
 use App\Http\Repository\ProductRepository;
 use App\Http\Resources\ProductResource;
@@ -75,6 +74,10 @@ class ProductController extends Controller
     {
         $data = Product::query();
 
+        if (Auth::user()->role->level > 1) {
+            $data->where('store_id', Auth::user()->store_id);
+        }
+
         if ($request->keyword) {
             $data->where('name', 'like', '%' . $request->keyword . '%');
         }
@@ -116,7 +119,7 @@ class ProductController extends Controller
             /* Upload Image */
             $file = $request->file('image');
             $filename = $file->hashName();
-            $file->move('assets/images', $filename);
+            $file->move('uploads', $filename);
 
             $data = [
                 'store_id' => config('app.store_id'),
@@ -124,7 +127,7 @@ class ProductController extends Controller
                 'slug' => Str::slug($request->name) . random_int(1000, 9999),
                 'price' => $request->price,
                 'image' => $filename,
-                'created_by' => Auth::id()
+                'created_by' => Auth::guard('api')->id()
             ];
 
             Product::create($data);
@@ -169,14 +172,14 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'slug' => Str::slug($request->name) . random_int(1000, 9999),
                 'price' => $request->price,
-                'updated_by' => Auth::id()
+                'updated_by' => Auth::guard('api')->id()
             ];
 
             /* Upload Image */
             $file = $request->file('image');
             if ($file && $file->isValid()) {
                 $filename = $file->hashName();
-                $file->move('assets/images', $filename);
+                $file->move('uploads', $filename);
                 $data['image'] = $filename;
             }
 
@@ -196,8 +199,8 @@ class ProductController extends Controller
             $product->delete();
 
             /* Delete Image */
-            if (file_exists('assets/images' . $product->image)) {
-                unlink('assets/images' . $product->image);
+            if (file_exists('uploads/' . $product->image)) {
+                unlink('uploads/' . $product->image);
             }
 
             Cache::forget('product_' . $product->id);

@@ -23,7 +23,7 @@ class UserController extends Controller
     public function profile()
     {
         return Response::successWithData(
-            Auth::user()
+            Auth::guard('api')->user()
         );
     }
 
@@ -62,7 +62,7 @@ class UserController extends Controller
         }
 
         try {
-            User::where('id', Auth::id())->update($data);
+            User::where('id', Auth::guard('api')->id())->update($data);
 
             return Response::success();
         } catch (\Throwable $e) {

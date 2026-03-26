@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('payment_method', ['full', 'dp'])->default('dp');
             $table->string('payment_image');
             $table->enum('status', ['completed', 'confirmed', 'pending', 'canceled'])->default('pending');
+            $table->enum('type', ['delivery-order', 'reservation'])->default('reservation');
             $table->string('device_id')->nullable();
             $table->timestamps();
         });

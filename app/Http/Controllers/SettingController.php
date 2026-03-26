@@ -17,7 +17,7 @@ class SettingController extends Controller
     {
         $setting = SettingRepository::get();
 
-        return response()->download('assets/images/' . $setting->qris, $setting->qris);
+        return response()->download('uploads/' . $setting->qris, $setting->qris);
     }
 
     public function index()
@@ -72,7 +72,7 @@ class SettingController extends Controller
             $file = $request->file('qris');
             if ($file && $file->isValid()) {
                 $filename = $file->hashName();
-                $file->move('assets/images', $filename);
+                $file->move('uploads', $filename);
                 $data['qris'] = $filename;
             }
 

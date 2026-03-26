@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\Log;
 use App\Http\Helpers\Response;
 use App\Http\Repository\ProductRepository;
+use App\Http\Repository\StoreRepository;
 use App\Models\Order;
 use App\Models\OrderItems;
 use Carbon\Carbon;
@@ -20,6 +21,7 @@ class OrderController extends Controller
     {
         /* Validate Request */
         $validation = Validator::make($request->all(), [
+            'store_id' => 'required|int',
             'customer_name' => 'required',
             'customer_phone' => 'required',
             'order_items' => 'required',
@@ -37,6 +39,12 @@ class OrderController extends Controller
                 'validation error',
                 400
             );
+        }
+
+        /* Get Store */
+        $store = StoreRepository::find($request->store_id);
+        if (!$store) {
+            return Response::error('Store not found', 404);
         }
 
         DB::beginTransaction();
@@ -58,12 +66,12 @@ class OrderController extends Controller
             }
 
             $fileName = Str::random(20) . '.png';
-            file_put_contents('assets/images/' . $fileName, $image);
+            file_put_contents('uploads/' . $fileName, $image);
 
             /* Create Order */
             $orderId = strtoupper(Str::random(8));
             $data = [
-                'store_id' => config('app.store_id'),
+                'store_id' => $store->id,
                 'order_id' => $orderId,
                 'customer_name' => $request->customer_name,
                 'customer_phone' => $request->customer_phone,
@@ -77,8 +85,8 @@ class OrderController extends Controller
                 'device_id' => $request->device_id
             ];
 
-            if (Auth::check()) {
-                $data['user_id'] = Auth::id();
+            if (Auth::guard('api')->check()) {
+                $data['user_id'] = Auth::guard('api')->id();
             }
 
             $order = Order::create($data);
@@ -184,8 +192,8 @@ class OrderController extends Controller
         $orders = Order::with('order_items')
             ->whereDate('created_at', Carbon::now());
 
-        if (Auth::check()) {
-            $orders->where('user_id', Auth::id());
+        if (Auth::guard('api')->check()) {
+            $orders->where('user_id', Auth::guard('api')->id());
         }
 
         $orders = $orders->latest()

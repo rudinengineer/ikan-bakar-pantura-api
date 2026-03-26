@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Packet;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\Store;
 use App\Models\User;
+use App\Models\UserAccessItem;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -26,26 +28,93 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        Role::create([
+            'name' => 'Superadmin',
+            'level' => 1
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'User Management',
+            'access_link' => 'user-management',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Kelola Kategori',
+            'access_link' => 'category',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Kelola Menu',
+            'access_link' => 'product',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Kelola Paket',
+            'access_link' => 'packet',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Kelola Cabang',
+            'access_link' => 'store',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Pengaturan Aplikasi',
+            'access_link' => 'app-setting',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_delete' => true,
+        ]);
+
+        UserAccessItem::create([
+            'access_name' => 'Kelola Pesanan',
+            'access_link' => 'order',
+            'access_read' => true,
+            'access_create' => true,
+            'access_update' => true,
+            'access_approve' => true,
+            'access_delete' => true,
+        ]);
+
         Store::create([
             'name' => 'Ikan Bakar Pantura',
-            'area' => 'Merakurak'
+            'area' => 'Merakurak',
+            'address' => 'Jln. Soedirman No. 9',
+            'bank' => 'BCA',
+            'account_number' => '8241119432',
+            'account_name' => 'Fanny Maftuhah Sutrisno',
         ]);
 
         User::create([
             'store_id' => 1,
+            'role_id' => 1,
             'name' => 'Admin',
-            'username' => Str::slug('Admin', '_'),
-            'phone' => '0812345676',
+            'username' => 'admin',
+            'email' => 'admin@gmail.com',
+            'phone_prefix' => '62',
+            'phone' => '812345678',
             'password' => Hash::make('123456'),
-            'role' => 'admin'
-        ]);
-
-        User::create([
-            'store_id' => 1,
-            'name' => 'Erick Setyawan',
-            'username' => Str::slug('Erick Setyawan', '_'),
-            'phone' => '0812345678',
-            'password' => Hash::make('123456')
         ]);
 
         Category::create([

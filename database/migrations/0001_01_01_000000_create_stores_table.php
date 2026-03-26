@@ -14,9 +14,17 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->string('name', 50);
+            $table->string('logo')->nullable();
             $table->string('area')->nullable();
             $table->text('address')->nullable();
+            $table->string('whatsapp', 20)->nullable();
+            $table->string('bank', 50)->nullable();
+            $table->string('account_number', 50)->nullable();
+            $table->string('account_name', 100)->nullable();
+            $table->string('qris')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }
