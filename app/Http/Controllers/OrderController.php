@@ -77,6 +77,7 @@ class OrderController extends Controller
                 'customer_phone' => $request->customer_phone,
                 'booking_date' => $request->booking_date . ' ' . $request->booking_time,
                 'customer_total' => $request->customer_total,
+                'customer_seat' => $request->customer_seat,
                 'note' => $request->note,
                 'payment_method' => $request->payment_method,
                 'payment_image' => $fileName,

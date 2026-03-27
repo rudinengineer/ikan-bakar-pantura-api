@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\Log;
 use App\Http\Helpers\Response;
 use App\Models\Order;
+use App\Models\OrderItems;
+use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -98,19 +102,41 @@ class OrderController extends Controller
 
         /* Validate Request */
         $validation = Validator::make($request->all(), [
-            'category_id' => 'required|int',
-            'name' => 'required',
-            'order_number' => 'required|int'
+            'customer_name' => 'required',
+            'customer_phone' => 'required',
+            'booking_date' => 'required',
+            'customer_total' => 'required|int',
+            'order_items' => 'required',
+            'payment_method' => 'required',
+            'payment_total' => 'required|int',
+            'image' => 'required|image'
         ], [
-            'category_id' => [
-                'required' => 'Kategori wajib diisi'
+            'customer_name' => [
+                'required' => 'Nama pelanggan wajib diisi'
             ],
-            'name' => [
-                'required' => 'Nama paket wajib diisi'
+            'customer_phone' => [
+                'required' => 'WhatsApp wajib diisi'
             ],
-            'order_number' => [
-                'required' => 'Urutan wajib diisi',
-                'int' => 'Urutan harus berupa angka',
+            'booking_date' => [
+                'required' => 'Tanggal wajib diisi',
+            ],
+            'customer_total' => [
+                'required' => 'Jumlah Tamu wajib diisi',
+                'int' => 'Jumlah tamu harus berupa angka'
+            ],
+            'order_items' => [
+                'required' => 'Harap memilih setidaknya satu menu'
+            ],
+            'payment_method' => [
+                'required' => 'Harap memilih metode pembayaran'
+            ],
+            'payment_total' => [
+                'required' => 'Jumlah dibayar wajib diisi',
+                'int' => 'Jumlah dibayar harus berupa angka'
+            ],
+            'image' => [
+                'required' => 'Harap mengupload gambar',
+                'image' => 'Harap mengupload gambar'
             ]
         ]);
 
@@ -123,20 +149,75 @@ class OrderController extends Controller
             );
         }
 
-        $data = [
-            'store_id' => Auth::user()->store_id,
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'order_number' => $request->order_number,
-            'created_by' => Auth::id()
-        ];
-
-        /* Insert Data */
+        DB::beginTransaction();
         try {
-            Order::create($data);
+            /* Upload Image */
+            $image = $request->file('image');
+            $filename = $image->hashName();
+            $image->move('uploads', $filename);
+
+            /* Create Order */
+            $orderId = strtoupper(Str::random(8));
+            $data = [
+                'store_id' => Auth::user()->store_id,
+                'order_id' => $orderId,
+                'customer_name' => $request->customer_name,
+                'customer_phone' => $request->customer_phone,
+                'booking_date' => $request->booking_date,
+                'customer_total' => $request->customer_total,
+                'customer_seat' => $request->customer_seat,
+                'note' => $request->note,
+                'payment_method' => $request->payment_method === 'custom' ? 'dp' : $request->payment_method,
+                'payment_image' => $filename,
+                'payment_total' => $request->integer('payment_total') ?? 0,
+                'total' => 0,
+                'device_id' => $request->device_id
+            ];
+
+            $order = Order::create($data);
+
+            /* Create Order Items */
+            $orderItemsData = [];
+            $total = 0;
+
+            foreach ($request->post('order_items') as $productId) {
+                /* Get Product */
+                $product = Product::find($productId);
+                if (!$product) {
+                    DB::rollBack();
+                    return Response::error('Cannot process request', 422);
+                }
+
+                $qty = intval($request->post('qty')[$productId]);
+                $orderItemsData[] = [
+                    'order_id' => $order->id,
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'price' => $product->price,
+                    'quantity' => $qty
+                ];
+
+                $total += intval($product->price) * $qty;
+            }
+
+            if (count($orderItemsData) <= 0) {
+                DB::rollBack();
+                return Response::error('Cannot process request', 422);
+            }
+
+            OrderItems::insert($orderItemsData);
+
+            /* Update Order */
+            $order->update([
+                'total' => $total,
+                'payment_total' => $request->payment_method === 'custom' ? $request->integer('payment_total') : ($request->payment_method === 'dp' ? $total / 2 : $total)
+            ]);
+
+            DB::commit();
 
             return Response::success();
         } catch (\Throwable $e) {
+            DB::rollBack();
             Log::error('failed to store order', $e);
             return Response::error();
         }

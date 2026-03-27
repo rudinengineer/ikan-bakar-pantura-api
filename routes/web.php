@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
 
         /* Route Resource */
         Route::post('/{order}/update-payment-total', [OrderController::class, 'updatePaymentTotal'])->name('update-payment-total');
-        Route::post('/{order}/confirmed', [OrderController::class, 'confirmOrder'])->name('update-payment-total');
+        Route::post('/{order}/confirmed', [OrderController::class, 'confirmOrder'])->name('confirm-order');
         Route::resource('/', OrderController::class)->parameters([
             '' => 'order'
         ]);

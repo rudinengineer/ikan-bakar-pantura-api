@@ -13,19 +13,19 @@
 
                     <div class="w-100 d-flex justify-content-between align-items-center">
                         <!-- Create Modal -->
-                        @if (check_user_access('order', 'create'))    
+                        @if (check_user_access('order', 'create') && auth()->user()->role->level > 1)    
                             <div>
                                 <button id="create-btn" class="justify-content-center w-100 btn mb-1 btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add-modal">
                                     <i class="ti ti-plus fs-4 me-2"></i>
-                                    <span>Tambah Pesanan</span>
+                                    <span>Buat Pesanan</span>
                                 </button>
                             </div>
 
                             <div id="add-modal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-xl">
                                     <form id="create-form" method="post" class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title mt-0" id="myModalLabel">Tambah Pengguna</h5>
+                                            <h5 class="modal-title mt-0" id="myModalLabel">Buat Pesanan</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                                             </button>

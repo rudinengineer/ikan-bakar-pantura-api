@@ -117,6 +117,7 @@ class AppSettingController extends Controller
 
             /* Delete Cache */
             Cache::forget('setting');
+            Cache::forget('store-' . Auth::user()->store_id);
 
             return Response::success();
         } catch (\Throwable $e) {

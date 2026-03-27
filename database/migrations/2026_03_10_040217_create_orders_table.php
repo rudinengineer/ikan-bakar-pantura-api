@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('customer_phone', 20);
             $table->dateTime('booking_date');
             $table->integer('customer_total');
+            $table->string('customer_seat')->nullable();
             $table->text('note')->nullable();
             $table->bigInteger('total');
             $table->bigInteger('payment_total');

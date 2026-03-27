@@ -117,6 +117,7 @@
 
         // Show Create Modal
         $('#create-btn').on('click', function() {
+            $('#add-modal').find('.modal-body').off().find('*').off()
             $('#add-modal').find('.modal-body').load('{{ route('order.create') }}')
         })
 
@@ -137,6 +138,7 @@
             const formData = new FormData(e.target)
             formData.set('_method', 'POST')
             formData.set('_token', $('meta[name="csrf-token"]').attr('content'))
+            formData.set('payment_total', formData.get('payment_total').replace(/[^0-9]/g, ''))
 
             $.ajax({
                 url: '{{ route('order.store') }}',
@@ -148,6 +150,7 @@
                 success: () => {
                     form[0].reset()
                     table.ajax.reload(null, false)
+                    $('.modal').modal('hide')
 
                     iziToast.show({
                         title: 'Success',
@@ -161,10 +164,16 @@
                     if ( error.status === 400 ) {
                         const data = error.responseJSON?.data
 
-                        $('#category_id-error').text(data?.category_id)
-                        $('#name-error').text(data?.name)
+                        $('#customer_name-error').text(data?.customer_name)
+                        $('#customer_phone-error').text(data?.customer_phone)
+                        $('#note-error').text(data?.note)
+                        $('#booking_date-error').text(data?.booking_date)
+                        $('#customer_total-error').text(data?.customer_total)
+                        $('#customer_seat-error').text(data?.customer_seat)
+                        $('#order_items-error').text(data?.order_items)
+                        $('#payment_method-error').text(data?.payment_method)
+                        $('#payment_total-error').text(data?.payment_total)
                         $('#image-error').text(data?.image)
-                        $('#order_number-error').text(data?.order_number)
 
                         return
                     }
@@ -182,10 +191,16 @@
                     form.find('#create-btn-submit').find('span').addClass('d-none')
 
                     /* Reset Error */
-                    $('#category_id-error').text('')
-                    $('#name-error').text('')
+                    $('#customer_name-error').text('')
+                    $('#customer_phone-error').text('')
+                    $('#note-error').text('')
+                    $('#booking_date-error').text('')
+                    $('#customer_total-error').text('')
+                    $('#customer_seat-error').text('')
+                    $('#order_items-error').text('')
+                    $('#payment_method-error').text('')
+                    $('#payment_total-error').text('')
                     $('#image-error').text('')
-                    $('#order_number-error').text('')
                 },
                 complete: () => {
                     form.find('#create-btn-submit').prop('disabled', false)
@@ -200,7 +215,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('order.update-payment-total', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('order.confirm-order', '-id-') }}/'.replace('-id-', id),
                 method: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')

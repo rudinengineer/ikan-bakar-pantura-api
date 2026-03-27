@@ -17,7 +17,7 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $ordersPending = Order::whereDate('created_at', date('Y-m-d'))
+        $ordersPending = Order::whereMonth('created_at', date('m'))
             ->where('status', 'pending');
 
         if (Auth::user()->role->level > 1) {
@@ -29,13 +29,13 @@ class HomeController extends Controller
             $customer->where('store_id', Auth::user()->store_id);
         }
 
-        $ordersConfirmed = Order::whereDate('created_at', date('Y-m-d'))
+        $ordersConfirmed = Order::whereMonth('created_at', date('m'))
             ->where('status', 'confirmed');
         if (Auth::user()->role->level > 1) {
             $ordersConfirmed->where('store_id', Auth::user()->store_id);
         }
 
-        $ordersToday = Order::whereDate('created_at', date('Y-m-d'));
+        $ordersToday = Order::whereMonth('created_at', date('m'));
         if (Auth::user()->role->level > 1) {
             $ordersToday->where('store_id', Auth::user()->store_id);
         }

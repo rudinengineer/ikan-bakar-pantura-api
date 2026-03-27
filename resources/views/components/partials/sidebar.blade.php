@@ -1,10 +1,14 @@
+@php
+    $store = \App\Http\Repository\StoreRepository::find(auth()->user()->store_id);
+@endphp
+
 <!-- ---------------------------------- -->
 <!-- Start Vertical Layout Sidebar -->
 <!-- ---------------------------------- -->
-<div class="brand-logo d-flex align-items-center justify-content-between">
+<div class="brand-logo d-flex align-items-center justify-content-center">
     <a href="{{ url('#dashboard') }}" class="text-nowrap logo-img">
-        <img src="{{ url('assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark" />
-        <img src="{{ url('assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light" />
+        <img src="{{ asset('uploads/' . $store->logo) }}" class="dark-logo" alt="Logo-Dark" height="60" />
+        <img src="{{ asset('uploads/' . $store->logo) }}" class="light-logo" alt="Logo-light" height="60" />
     </a>
     <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
         <i class="ti ti-x"></i>
