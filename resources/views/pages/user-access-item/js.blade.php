@@ -89,7 +89,7 @@
         // Show Edit Modal
         $('#app').on('click', '.edit-btn', function() {
             const id = $(this).attr('data-id')
-            const url = '{{ route('user-access-item.edit', '-id-') }}/'.replace('-id-', id)
+            const url = '{{ route('user-access-item.edit', '-id-') }}'.replace('-id-', id)
             $(`#edit-modal`).find('.modal-body').load(url)
         })
 
@@ -183,7 +183,7 @@
             formData.set('access_approve', formData.get('access_approve') === 'on' ? 1 : 0)
 
             $.ajax({
-                url: '{{ route('user-access-item.update', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('user-access-item.update', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 contentType: false,
                 processData: false,
@@ -240,7 +240,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('user-access-item.destroy', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('user-access-item.destroy', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                      _method: 'DELETE',

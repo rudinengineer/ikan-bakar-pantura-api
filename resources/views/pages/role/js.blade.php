@@ -98,7 +98,7 @@
         // Show Edit Modal
         $('#app').on('click', '.edit-btn', function() {
             const id = $(this).attr('data-id')
-            const url = '{{ route('role.edit', '-id-') }}/'.replace('-id-', id)
+            const url = '{{ route('role.edit', '-id-') }}'.replace('-id-', id)
             $(`#edit-modal`).find('.modal-body').load(url)
         })
 
@@ -176,7 +176,7 @@
             formData.set('_token', $('meta[name="csrf-token"]').attr('content'))
 
             $.ajax({
-                url: '{{ route('role.update', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('role.update', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 contentType: false,
                 processData: false,
@@ -233,7 +233,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('role.destroy', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('role.destroy', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                      _method: 'DELETE',

@@ -194,7 +194,7 @@
             formData.set('_token', $('meta[name="csrf-token"]').attr('content'))
 
             $.ajax({
-                url: '{{ route('product.update', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('product.update', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 contentType: false,
                 processData: false,
@@ -253,7 +253,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('product.destroy', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('product.destroy', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                      _method: 'DELETE',

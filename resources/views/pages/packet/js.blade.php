@@ -123,7 +123,7 @@
         // Show Edit Modal
         $('#app').on('click', '.edit-btn', function() {
             const id = $(this).attr('data-id')
-            const url = '{{ route('packet.edit', '-id-') }}/'.replace('-id-', id)
+            const url = '{{ route('packet.edit', '-id-') }}'.replace('-id-', id)
             $(`#edit-modal`).find('.modal-body').load(url)
         })
 
@@ -205,7 +205,7 @@
             formData.set('_token', $('meta[name="csrf-token"]').attr('content'))
 
             $.ajax({
-                url: '{{ route('packet.update', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('packet.update', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 contentType: false,
                 processData: false,
@@ -266,7 +266,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('packet.destroy', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('packet.destroy', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                      _method: 'DELETE',

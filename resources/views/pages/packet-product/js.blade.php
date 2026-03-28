@@ -157,7 +157,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('packet-product.destroy', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('packet-product.destroy', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                      _method: 'DELETE',

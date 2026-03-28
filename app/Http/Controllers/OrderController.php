@@ -79,7 +79,7 @@ class OrderController extends Controller
                 'customer_total' => $request->customer_total,
                 'customer_seat' => $request->customer_seat,
                 'note' => $request->note,
-                'payment_method' => $request->payment_method,
+                'payment_method' => $request->payment_method === 'custom' ? 'dp' : $request->payment_method,
                 'payment_image' => $fileName,
                 'payment_total' => 0,
                 'total' => 0,
@@ -195,10 +195,19 @@ class OrderController extends Controller
 
         if (Auth::guard('api')->check()) {
             $orders->where('user_id', Auth::guard('api')->id());
+        } else {
+            $orders->where('device_id', request()->header('X-DEVICE-ID'));
         }
 
         $orders = $orders->latest()
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    ...$item->toArray(),
+                    'booking_date' => Carbon::parse($item->booking_date)->translatedFormat('l, d F Y'),
+                    'booking_time' => Carbon::parse($item->booking_date)->format('H:i')
+                ];
+            });
 
         return Response::successWithData(
             $orders

@@ -69,7 +69,7 @@
         // Show Edit Modal
         $('#app').on('click', '.edit-btn', function() {
             const id = $(this).attr('data-id')
-            const url = '{{ route('category.edit', '-id-') }}/'.replace('-id-', id)
+            const url = '{{ route('category.edit', '-id-') }}'.replace('-id-', id)
             $(`#edit-modal`).find('.modal-body').load(url)
         })
 
@@ -85,7 +85,7 @@
             formData.set('_token', $('meta[name="csrf-token"]').attr('content'))
 
             $.ajax({
-                url: '{{ route('category.update', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('category.update', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 contentType: false,
                 processData: false,

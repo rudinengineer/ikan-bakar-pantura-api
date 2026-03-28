@@ -126,7 +126,7 @@
             const id = $(this).attr('data-id')
             $('#confirm-btn').attr('data-id', id)
 
-            const url = '{{ route('order.show', '-id-') }}/'.replace('-id-', id)
+            const url = '{{ route('order.show', '-id-') }}'.replace('-id-', id)
             $(`#edit-modal`).find('.modal-body').load(url)
         })
 
@@ -215,7 +215,7 @@
             const id = $(this).attr('data-id')
 
             $.ajax({
-                url: '{{ route('order.confirm-order', '-id-') }}/'.replace('-id-', id),
+                url: '{{ route('order.confirm-order', '-id-') }}'.replace('-id-', id),
                 method: 'POST',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')

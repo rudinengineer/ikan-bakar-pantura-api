@@ -18,8 +18,9 @@ class AuthController extends Controller
     {
         /* Validate Request */
         $validation = Validator::make($request->all(), [
+            'store_id' => 'required|int',
             'name' => 'required',
-            'phone' => 'required|unique:users',
+            'phone' => 'required|unique:customers',
             'password' => 'required|min:6',
         ]);
 
@@ -35,18 +36,16 @@ class AuthController extends Controller
         try {
             /* Create User */
             $user = Customer::create([
-                'store_id' => config('app.store_id'),
+                'store_id' => $request->store_id,
                 'name' => $request->name,
                 'username' => Str::slug($request->name, '_') . random_int(1000, 9999),
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
-                'role' => 'user'
+                // 'role' => 'user'
             ]);
 
             /* Generate Access Token */
-            $token = Auth::guard('api')->attempt(
-                $request->only('phone', 'password')
-            );
+            $token = Auth::guard('api')->login($user);
 
             return Response::successWithData([
                 'access_token' => $token,
@@ -75,14 +74,20 @@ class AuthController extends Controller
             );
         }
 
-        $credentials = $request->only('phone', 'password');
+        $user = Customer::where('phone', $request->phone)
+            ->first();
 
-        if (!$token = Auth::guard('api')->attempt($credentials)) {
+        if (!$user) {
             return Response::error('Unauthorized', 401);
         }
 
-        $user = Customer::where('phone', $request->phone)
-            ->first();
+        if (!Hash::check($request->password, $user->password)) {
+            return Response::error('Unauthorized', 401);
+        }
+
+        if (!$token = Auth::guard('api')->login($user)) {
+            return Response::error('Unauthorized', 401);
+        }
 
         return Response::successWithData([
             'access_token' => $token,
