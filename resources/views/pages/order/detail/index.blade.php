@@ -87,7 +87,11 @@
             <div class="col-md-6">
                 <div class="d-flex align-content-center gap-2">
                     <i class="ti fs-6 ti-calendar text-warning"></i>
-                    <h5><b>Detail Kunjungan</b></h5>
+                    <?php if ( $order->type === 'delivery-order' ) { ?>
+                        <h5><b>Detail Pengantaran</b></h5>
+                    <?php } else { ?>
+                        <h5><b>Detail Kunjungan</b></h5>
+                    <?php } ?>
                 </div>
     
                 <table class="w-100" cellpadding="8">
@@ -107,12 +111,14 @@
                             <b><b>{{ \Carbon\Carbon::parse($order->booking_date)->format('H:i') }} WIB</b></b>
                         </td>
                     </tr>
+                    <?php if ( $order->type === 'reservation' ) { ?>
                     <tr>
                         <td>Jumlah Orang</td>
                         <td class="text-end text-dark">
                             <b><b>{{ $order->customer_total }} Orang</b></b>
                         </td>
                     </tr>
+                    <?php } ?>
                 </table>
             </div>
         </div>

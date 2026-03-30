@@ -39,6 +39,12 @@
                 },
                 {
                     data: 'order_id',
+                    render: (m,t,data) => {
+                        return `
+                        <div>${data.order_id}</div>
+                        <span class="fw-semibold ${data.type === 'delivery-order' ? 'text-success' : 'text-warning'}">${data.type === 'delivery-order' ? 'Delivery Order' : 'Reservasi'}</span>
+                        `
+                    }
                 },
                 @if (auth()->user()->role->level >= 1)
                 {

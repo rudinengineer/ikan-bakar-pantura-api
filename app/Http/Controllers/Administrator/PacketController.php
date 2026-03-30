@@ -106,7 +106,7 @@ class PacketController extends Controller
         /* Validate Request */
         $validation = Validator::make($request->all(), [
             'category_id' => 'required|int',
-            'name' => 'required',
+            // 'name' => 'required',
             'image' => 'required|image',
             'order_number' => 'required|int'
         ], [
@@ -176,7 +176,7 @@ class PacketController extends Controller
         /* Validate Request */
         $validation = Validator::make($request->all(), [
             'category_id' => 'required|int',
-            'name' => 'required',
+            // 'name' => 'required',
             'image' => 'nullable|image',
             'order_number' => 'required|int'
         ], [

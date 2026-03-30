@@ -97,6 +97,8 @@ Route::get('/product/{slug}', [ProductController::class, 'getByPacket']);
 /* Checkout */
 Route::post('/checkout', [OrderController::class, 'checkout']);
 
+Route::get('/time-available', [OrderController::class, 'timeAvailable']);
+
 /* Order History */
 Route::get('/order/history', [OrderController::class, 'history']);
 Route::post('/order/{order:order_id}', [OrderController::class, 'detail']);

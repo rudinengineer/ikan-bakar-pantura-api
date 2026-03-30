@@ -17,6 +17,55 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    public function timeAvailable(Request $request)
+    {
+        $times = [
+            "11:00",
+            "11:30",
+            "12:00",
+            "12:30",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30",
+            "17:00",
+            "17:30",
+            "18:00",
+            "18:30",
+            "19:00",
+            "19:30",
+            "20:00",
+            "20:30",
+            "21:00",
+            "21:30",
+            "22:00",
+        ];
+
+        $result = [];
+        foreach ($times as $row) {
+            $find = Order::where('type', 'delivery-order')
+                ->where('booking_date', 'like', $request->date . ' ' . $row . '%')
+                ->first();
+            if ($find) {
+                $result[] = [
+                    'time' => $row,
+                    'available' => false
+                ];
+            } else {
+                $result[] = [
+                    'time' => $row,
+                    'available' => true
+                ];
+            }
+        }
+
+        return Response::successWithData($result);
+    }
+
     public function checkout(Request $request)
     {
         /* Validate Request */
@@ -27,7 +76,7 @@ class OrderController extends Controller
             'order_items' => 'required',
             'booking_date' => 'required',
             'booking_time' => 'required',
-            'customer_total' => 'required',
+            // 'customer_total' => 'required',
             'payment_method' => 'required',
             'payment_image' => 'required',
         ]);
@@ -83,7 +132,8 @@ class OrderController extends Controller
                 'payment_image' => $fileName,
                 'payment_total' => 0,
                 'total' => 0,
-                'device_id' => $request->device_id
+                'device_id' => $request->device_id,
+                'type' => $request->type
             ];
 
             if (Auth::guard('api')->check()) {
@@ -188,9 +238,10 @@ class OrderController extends Controller
         );
     }
 
-    public function history()
+    public function history(Request $request)
     {
         $orders = Order::with('order_items')
+            ->where('type', $request->type)
             ->whereDate('created_at', Carbon::now());
 
         if (Auth::guard('api')->check()) {
