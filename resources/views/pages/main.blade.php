@@ -35,7 +35,7 @@
                     <div id="app"></div>
                 </div>
             </div>
-            @include('components.partials.customizer')
+            {{-- @include('components.partials.customizer') --}}
         </div>
     </div>
     <div class="dark-transparent sidebartoggler"></div>

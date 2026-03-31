@@ -41,6 +41,7 @@
         <!-- ------------------------------- -->
         <!-- start notification Dropdown -->
         <!-- ------------------------------- -->
+        @if (false)
         <li class="nav-item nav-icon-hover-bg rounded-circle dropdown">
           <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
             aria-expanded="false">
@@ -51,6 +52,7 @@
             @include('components.header.dd-notification')
           </div>
         </li>
+        @endif
         <!-- ------------------------------- -->
         <!-- end notification Dropdown -->
         <!-- ------------------------------- -->
