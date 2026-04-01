@@ -93,7 +93,7 @@ class CategoryController extends Controller
 
         /* Validate Request */
         $validation = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'nullable',
         ]);
 
         if ($validation->fails()) {
