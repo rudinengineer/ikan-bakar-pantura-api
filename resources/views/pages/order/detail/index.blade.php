@@ -179,6 +179,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Biaya Ongkir</td>
+                        <td class="text-end text-dark">
+                            <b>Rp {{ number_format(10000, 0, '.', '.') }}</b>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Total Tagihan</td>
                         <td class="text-end text-dark">
                             <b>Rp {{ number_format($order->total, 0, '.', '.') }}</b>

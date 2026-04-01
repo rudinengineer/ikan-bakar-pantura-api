@@ -32,10 +32,11 @@
           <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
             <div class="card mb-0">
               <div class="card-body">
-                <a href="{{ route('login') }}" class="text-nowrap logo-img text-center d-block mb-5 w-100">
+                <h3 style="font-family: 'Plus Jakarta Sans', sans-serif;" class="mb-4 text-center">Dashboard Login</h3>
+                {{-- <a href="{{ route('login') }}" class="text-nowrap logo-img text-center d-block mb-5 w-100">
                   <img src="{{ url('assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark" />
                   <img src="{{ url('assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light" />
-                </a>
+                </a> --}}
                 <form id="form" method="POST">
                   <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

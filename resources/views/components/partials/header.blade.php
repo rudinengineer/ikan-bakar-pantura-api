@@ -1,3 +1,7 @@
+@php
+    $store = \App\Http\Repository\StoreRepository::find(auth()->user()->store_id);
+@endphp
+
 <!-- ---------------------------------- -->
 <!-- Start Vertical Layout Header -->
 <!-- ---------------------------------- -->
@@ -14,8 +18,8 @@
 
   <div class="d-block d-lg-none py-4">
     <a href="main/index" class="text-nowrap logo-img">
-      <img src="{{ url('assets/images/logos/dark-logo.svg') }}" class="dark-logo" alt="Logo-Dark" />
-      <img src="{{ url('assets/images/logos/light-logo.svg') }}" class="light-logo" alt="Logo-light" />
+      <img src="{{ asset('uploads/' . $store->logo) }}" class="dark-logo" alt="Logo-Dark" height="50" />
+      <img src="{{ asset('uploads/' . $store->logo) }}" class="light-logo" alt="Logo-light" height="50" />
     </a>
   </div>
   <a class="navbar-toggler nav-icon-hover-bg rounded-circle p-0 mx-0 border-0" href="javascript:void(0)" data-bs-toggle="collapse"
@@ -25,8 +29,8 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <div class="d-flex align-items-center justify-content-between">
       <a href="javascript:void(0)" class="nav-link nav-icon-hover-bg rounded-circle mx-0 ms-n1 d-flex d-lg-none align-items-center justify-content-center"
-        type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar"
-        aria-controls="offcanvasWithBothOptions">
+        type="button"
+        aria-controls="offcanvasWithBothOptions" style="opacity: 0;">
         <i class="ti ti-align-justified fs-7"></i>
       </a>
       <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">

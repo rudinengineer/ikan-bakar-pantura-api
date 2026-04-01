@@ -179,9 +179,14 @@ class OrderController extends Controller
             OrderItems::insert($orderItemsData);
 
             /* Update Order */
+            $paymentTotal = $request->payment_method === 'custom' ? $request->nominal_dp : ($request->payment_method === 'dp' ? $total / 2 : $total);
+            if ($request->type === 'delivery-order') {
+                $total += 10000;
+            }
+
             $order->update([
                 'total' => $total,
-                'payment_total' => $request->payment_method === 'custom' ? $request->nominal_dp : ($request->payment_method === 'dp' ? $total / 2 : $total)
+                'payment_total' => $request->payment_method === 'full' ? $paymentTotal + 10000 : $paymentTotal
             ]);
 
             DB::commit();
