@@ -25,7 +25,7 @@
                                 <div class="modal-dialog">
                                     <form id="create-form" method="post" class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title mt-0" id="myModalLabel">Tambah Pengguna</h5>
+                                            <h5 class="modal-title mt-0" id="myModalLabel">Tambah Paket</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                                             </button>
